@@ -2,6 +2,8 @@ package it.unibo.oop.lab.lambda;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -58,10 +60,9 @@ public final class LambdaUtilities {
      *         otherwise.
      */
     public static <T> List<Optional<T>> optFilter(final List<T> list, final Predicate<T> pre) {
-        /*
-         * Suggestion: consider Optional.filter
-         */
-        return null;
+        final List<Optional<T>> l = new LinkedList<>();
+        list.forEach(element -> l.add(Optional.of(element).filter(pre)));
+        return l;
     }
 
     /**
@@ -78,9 +79,13 @@ public final class LambdaUtilities {
      */
     public static <R, T> Map<R, Set<T>> group(final List<T> list, final Function<T, R> op) {
         /*
-         * Suggestion: consider Map.merge
+         * Suggestion: consider map.merge
          */
-        return null;
+        final Map<R, Set<T>> map = new HashMap<>();
+        list.forEach(element -> map.put(op.apply(element), new HashSet<>()));
+        list.forEach(element -> map.get(op.apply(element)).add(element));
+        //list.forEach(element -> map.merge(op.apply(element), Set.of(element), (t1, t2) -> t1.add()));
+        return map;
     }
 
     /**
@@ -101,7 +106,9 @@ public final class LambdaUtilities {
          *
          * Keep in mind that a map can be iterated through its forEach method
          */
-        return null;
+        final Map<K, V> filledMap = new HashMap<>();
+        map.forEach((key, value) -> filledMap.put(key, value.orElse(def.get())));
+        return filledMap;
     }
 
     /**
@@ -110,7 +117,7 @@ public final class LambdaUtilities {
      */
     @SuppressWarnings("PMD.SystemPrintln")
     public static void main(final String[] args) {
-        final List<Integer> li = IntStream.range(1, 8).mapToObj(i -> Integer.valueOf(i)).collect(Collectors.toList());
+        final List<Integer> li = IntStream.range(1, 8).mapToObj(Integer::valueOf).collect(Collectors.toList());
         System.out.println(dup(li, x -> x + 100));
         /*
          * [1, 101, 2, 102, 3, 103, 4, 104, 5, 105, 6, 106, 7, 107]
