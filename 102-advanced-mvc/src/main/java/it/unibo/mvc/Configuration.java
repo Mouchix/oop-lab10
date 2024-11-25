@@ -1,6 +1,6 @@
 package it.unibo.mvc;
 
-
+import java.io.*;
 /**
  * Encapsulates the concept of configuration.
  */
@@ -9,6 +9,7 @@ public final class Configuration {
     private final int max; 
     private final int min;
     private final int attempts;
+    private static File file = new File("src/main/resources/config.yml");
 
     private Configuration(final int max, final int min, final int attempts) {
         this.max = max;
@@ -72,6 +73,21 @@ public final class Configuration {
         private int attempts = ATTEMPTS;
         private boolean consumed = false;
 
+        void readFromFile(File file) {
+            try (
+                final BufferedReader r = new BufferedReader(
+                    new InputStreamReader(
+                        new FileInputStream(file)))) {
+                for(int i = 0; i < 3; i++) {
+                    String line = r.readLine();
+                    for(var word: line.split(":")) {
+
+                    }
+                }
+            } catch (Exception ex) {
+
+            }
+        }
         /**
          * @param min the minimum value
          * @return this builder, for method chaining
