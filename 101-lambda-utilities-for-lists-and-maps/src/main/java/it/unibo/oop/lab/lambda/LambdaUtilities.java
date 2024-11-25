@@ -82,9 +82,10 @@ public final class LambdaUtilities {
          * Suggestion: consider map.merge
          */
         final Map<R, Set<T>> map = new HashMap<>();
-        list.forEach(element -> map.put(op.apply(element), new HashSet<>()));
-        list.forEach(element -> map.get(op.apply(element)).add(element));
-        //list.forEach(element -> map.merge(op.apply(element), Set.of(element), (t1, t2) -> t1.add()));
+        list.forEach(element -> map.merge(op.apply(element), new HashSet<>(Set.of(element)), (set1, set2) -> {
+            set1.addAll(set2); 
+            return set1;
+        }));
         return map;
     }
 
